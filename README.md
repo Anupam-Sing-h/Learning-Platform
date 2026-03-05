@@ -23,40 +23,35 @@
 
 ### Frontend
 
-| Technology         | Purpose                  |
-| ------------------ | ------------------------ |
-| **Next.js 15**     | React framework (App Router, Turbopack) |
-| **React 19**       | UI library               |
-| **TypeScript**     | Type safety              |
-| **Tailwind CSS 4** | Utility-first styling    |
-| **shadcn/ui**      | Pre-built accessible components (Radix UI primitives) |
-| **Lucide React**   | Icon library             |
-| **next-themes**    | Dark / light mode toggle |
-| **sonner**         | Toast notifications      |
-| **react-markdown** | Markdown rendering in chat |
-| **embla-carousel** | Flashcard carousel       |
+| Technology | Purpose |
+| :--- | :--- |
+| ![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=for-the-badge&logo=next.js&logoColor=white) | React framework (App Router, Turbopack) |
+| ![React](https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black) | UI library |
+| ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) | Type safety |
+| ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white) | Utility-first styling |
+| ![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white) | Pre-built accessible components (Radix UI) |
+| ![Lucide React](https://img.shields.io/badge/Lucide_React-F56565?style=for-the-badge&logo=lucide&logoColor=white) | Icon library |
+| ![Markdown](https://img.shields.io/badge/react--markdown-000000?style=for-the-badge&logo=markdown&logoColor=white) | Markdown rendering in chat |
 
 ### Backend
 
-| Technology                | Purpose                         |
-| ------------------------- | ------------------------------- |
-| **FastAPI**               | Async Python web framework      |
-| **Uvicorn**               | ASGI server                     |
-| **Pydantic v2**           | Request / response validation   |
-| **Google Gemini 2.0 Flash** | LLM for generation & embeddings |
-| **Supabase (PostgreSQL)** | Database, vector store, auth    |
-| **youtube-transcript-api** | YouTube transcript extraction  |
-| **PyMuPDF**               | PDF text extraction             |
-| **NLTK**                  | Sentence-level text chunking    |
-| **SSE-Starlette**         | Server-Sent Events streaming    |
-| **httpx**                 | Async HTTP client               |
-| **pytest**                | Unit & integration testing      |
+| Technology | Purpose |
+| :--- | :--- |
+| ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) | Async Python web framework |
+| ![Python](https://img.shields.io/badge/Python_3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white) | Backend language |
+| ![Pydantic](https://img.shields.io/badge/Pydantic_v2-E92063?style=for-the-badge&logo=pydantic&logoColor=white) | Request / response validation |
+| ![Google Gemini](https://img.shields.io/badge/Gemini_2.0_Flash-4285F4?style=for-the-badge&logo=googlegemini&logoColor=white) | LLM for generation & embeddings |
+| ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white) | Database, vector store (pgvector) |
+| ![YouTube](https://img.shields.io/badge/YouTube_Transcript_API-FF0000?style=for-the-badge&logo=youtube&logoColor=white) | YouTube transcript extraction |
+| ![NLTK](https://img.shields.io/badge/NLTK-154F5B?style=for-the-badge&logo=python&logoColor=white) | Sentence-level text chunking |
+| ![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white) | Unit & integration testing |
 
 ### Infrastructure
 
-| Service      | Role                                 |
-| ------------ | ------------------------------------ |
-| **Supabase** | Hosted PostgreSQL + pgvector for similarity search |
+| Service | Role |
+| :--- | :--- |
+| ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white) | Hosted PostgreSQL + pgvector for similarity search |
+| ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white) | Frontend deployment (optional) |
 
 ---
 
