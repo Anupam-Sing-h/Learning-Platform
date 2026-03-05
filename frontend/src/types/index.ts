@@ -61,7 +61,7 @@ export interface ChatMessage {
     id: string;
     role: "user" | "assistant";
     message: string;
-    sources?: any[];
+    sources?: (string | { text_preview?: string; [key: string]: unknown })[];
     created_at: string;
     session_id?: string;
 }
