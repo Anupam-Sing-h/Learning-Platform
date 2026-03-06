@@ -141,6 +141,7 @@ export default function StudyDashboardPage() {
                         <AlertCircle className="h-8 w-8 text-red-500" />
                     </div>
                     <h2 className="text-2xl font-bold mb-2">Content Processing Failed</h2>
+                    <h3 className="text-2xl font-bold mb-2">Likely Gemini Free Tier Limit Exceeded for the Day(English Video will still be processed)</h3>
                     <p className="text-muted-foreground mb-6">
                         We encountered an error while analyzing this content. Please try deleting
                         this item from your library and uploading it again.
