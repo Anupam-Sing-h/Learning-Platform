@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, BackgroundTasks, HTTPException
 from app.models.schemas import (
-    ProcessVideoRequest, 
+    ProcessVideoRequest,
+    ProcessVideoWithTranscriptRequest,
     ProcessVideoResponse, 
     ContentResponse, 
     ContentListResponse
@@ -115,6 +116,84 @@ async def process_video(request: ProcessVideoRequest, background_tasks: Backgrou
     return {
         "content_id": content_id,
         "title": "Processing...",
+        "status": "processing"
+    }
+
+
+async def process_transcript_task(content_id: str, transcript_text: str, language_code: str = "en"):
+    """Background task to process a pre-fetched transcript (translate, chunk, embed, store)."""
+    try:
+        # 1. Translate if not English
+        if language_code != "en" and language_code != "en-US" and language_code != "en-GB" and "en" not in language_code.lower():
+            logger.info(f"Translating transcript from {language_code} to English for {content_id}")
+            from app.services.ai_service import translate_text
+            transcript_text = await translate_text(
+                text=transcript_text, 
+                source_lang=language_code, 
+                target_lang="English"
+            )
+            # Update the stored text with the English translation
+            supabase.table("contents").update({"raw_text": transcript_text}).eq("id", content_id).execute()
+            
+        # 2. Chunk text
+        chunks = chunking_service.chunk_text(transcript_text)
+        
+        # 3. Generate embeddings
+        chunk_texts = [c["chunk_text"] for c in chunks]
+        embeddings = await embedding_service.generate_embeddings_batch(chunk_texts)
+        
+        # 4. Store in vector store
+        await vector_store.store_chunks(content_id, chunks, embeddings)
+        
+        # 5. Mark as ready
+        supabase.table("contents").update({"status": "ready"}).eq("id", content_id).execute()
+        
+    except Exception as e:
+        logger.error(f"Error in process_transcript_task for {content_id}: {type(e).__name__}: {e}")
+        logger.error(f"Full traceback:\n{traceback.format_exc()}")
+        supabase.table("contents").update({"status": "error"}).eq("id", content_id).execute()
+
+
+@router.post("/process-video-with-transcript", response_model=ProcessVideoResponse)
+async def process_video_with_transcript(
+    request: ProcessVideoWithTranscriptRequest, 
+    background_tasks: BackgroundTasks
+):
+    """Process a YouTube video with a pre-fetched transcript (from Vercel)."""
+    logger.info(f"Received pre-fetched transcript for: {request.url} (title: {request.title})")
+    
+    if not request.transcript_text.strip():
+        raise HTTPException(status_code=400, detail="Transcript text is empty")
+    
+    content_id = str(uuid.uuid4())
+    
+    # Create record with all metadata already available
+    try:
+        supabase.table("contents").insert({
+            "id": content_id,
+            "title": request.title,
+            "source_type": "youtube",
+            "source_url": request.url,
+            "status": "processing",
+            "raw_text": request.transcript_text,
+            "thumbnail_url": request.thumbnail_url,
+            "duration": request.duration,
+        }).execute()
+    except Exception as e:
+        logger.error(f"Failed to insert record into Supabase: {e}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    
+    # Process in background (chunking + embedding + vector storage)
+    background_tasks.add_task(
+        process_transcript_task, 
+        content_id, 
+        request.transcript_text,
+        request.language_code
+    )
+    
+    return {
+        "content_id": content_id,
+        "title": request.title,
         "status": "processing"
     }
 

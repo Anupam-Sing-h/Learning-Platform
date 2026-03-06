@@ -9,6 +9,15 @@ class ProcessVideoRequest(BaseModel):
     url: str
 
 
+class ProcessVideoWithTranscriptRequest(BaseModel):
+    url: str
+    title: str
+    transcript_text: str
+    thumbnail_url: Optional[str] = None
+    duration: Optional[str] = None
+    language_code: str = "en"
+
+
 class ProcessVideoResponse(BaseModel):
     content_id: str
     title: str

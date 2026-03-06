@@ -13,6 +13,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
+    "he": "^1.2.0",
     "lucide-react": "^0.575.0",
     "next": "15.5.12",
     "next-themes": "^0.4.6",
@@ -21,7 +22,9 @@
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
     "sonner": "^2.0.7",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "youtube-caption-extractor": "^1.9.1",
+    "youtube-transcript-api": "^3.0.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
