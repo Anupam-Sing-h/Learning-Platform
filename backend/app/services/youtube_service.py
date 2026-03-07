@@ -27,40 +27,75 @@ def _fetch_transcript_sync(video_id: str):
     """Synchronous function to fetch transcript - runs in thread executor.
     
     Returns: (transcript_data, language_code) tuple.
-    
-    Strategy (5-step priority):
-    1. English transcript (manual or auto-generated) → return as 'en'.
-    2. Auto-generated non-English, translatable → YouTube translate to English.
-    3. Manual non-English, translatable → YouTube translate to English.
-    4. Any translatable transcript → YouTube translate to English.
-    5. Any available transcript (even non-translatable) → return raw with original lang code
-       (will be translated by Gemini in get_transcript).
     """
     import os
-    import tempfile
+    import requests
+    import http.cookiejar
+    import io
+    from youtube_transcript_api import YouTubeTranscriptApi
     
-    # Securely load cookies if they exist in the environment
+    # Securely load cookies from environment variable
     cookies_str = os.environ.get("YOUTUBE_COOKIES")
-    temp_cookie_path = None
+    session = requests.Session()
     
-    try:
-        # Create a temporary file to hold the cookies securely
-        if cookies_str:
-            # delete=False because we need to pass the path to the API, and Windows sometimes
-            # locks files preventing other processes from reading them if delete=True
-            fd, temp_cookie_path = tempfile.mkstemp(suffix=".txt")
-            with os.fdopen(fd, 'w', encoding='utf-8') as f:
-                f.write(cookies_str)
-            logger.info("Using secure temporary cookie file for YouTube authentication.")
+    if cookies_str:
+        try:
+            # Manually parse Netscape/Mozilla cookie format for higher robustness
+            jar = http.cookiejar.CookieJar()
             
-        api = YouTubeTranscriptApi()
-        
-        # Use the cookie file if it was successfully created
-        if temp_cookie_path:
-            transcript_list_obj = api.list(video_id, cookies=temp_cookie_path)
-        else:
-            logger.info("No YOUTUBE_COOKIES found. Attempting unauthenticated request.")
-            transcript_list_obj = api.list(video_id)
+            # Clean up: remove surrounding quotes if any
+            clean_cookies = cookies_str.strip().strip('"').strip("'")
+            
+            count = 0
+            for line in clean_cookies.splitlines():
+                line = line.strip()
+                # Skip comments and empty lines
+                if not line or line.startswith('#'):
+                    continue
+                
+                # Netscape format is tab-separated
+                parts = line.split('\t')
+                if len(parts) >= 7:
+                    domain, flag, path, secure, expiration, name, value = parts[:7]
+                    
+                    try:
+                        expires = int(expiration) if expiration.isdigit() else None
+                        cookie = http.cookiejar.Cookie(
+                            version=0, name=name, value=value,
+                            port=None, port_specified=False,
+                            domain=domain, domain_specified=True, 
+                            domain_initial_dot=domain.startswith('.'),
+                            path=path, path_specified=True,
+                            secure=secure.upper() == 'TRUE',
+                            expires=expires,
+                            discard=False, comment=None, comment_url=None, 
+                            rest={}, rfc2109=False
+                        )
+                        jar.set_cookie(cookie)
+                        count += 1
+                    except Exception:
+                        continue
+            
+            if count > 0:
+                session.cookies = jar
+                logger.info(f"Successfully loaded {count} YouTube cookies into request session.")
+            else:
+                logger.warning("No valid cookies found in YOUTUBE_COOKIES string.")
+                
+        except Exception as e:
+            logger.warning(f"Failed to parse YOUTUBE_COOKIES: {e}. Proceeding without authentication.")
+
+
+    try:
+        # Standardize headers
+        session.headers.update({
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+            "Accept-Language": "en-US,en;q=0.9",
+        })
+
+        # Initialize API with our pre-authenticated session
+        api = YouTubeTranscriptApi(http_client=session)
+        transcript_list_obj = api.list(video_id)
 
         # Step 1: Try to get an English transcript directly
         try:
@@ -108,14 +143,10 @@ def _fetch_transcript_sync(video_id: str):
         # Truly nothing available
         raise NoTranscriptFound(video_id, ['en'], transcript_list_obj)
         
-    finally:
-        # ALWAYS delete the temporary cookie file to ensure cookies don't leak
-        if temp_cookie_path and os.path.exists(temp_cookie_path):
-            try:
-                os.remove(temp_cookie_path)
-                logger.info("Securely deleted temporary cookie file.")
-            except Exception as e:
-                logger.warning(f"Failed to delete temporary cookie file: {e}")
+    except Exception as e:
+        logger.error(f"Error fetching transcript: {type(e).__name__}: {e}")
+        raise
+
 
 async def get_transcript(url: str) -> dict:
     """
