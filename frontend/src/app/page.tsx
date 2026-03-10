@@ -155,12 +155,13 @@ export default function HomePage() {
   return (
     <div className="mx-auto max-w-5xl space-y-12 pb-12 pt-8">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl gradient-glow p-12 text-center md:p-20 shadow-2xl">
+      <section className="relative overflow-hidden rounded-3xl bg-[#110826] p-12 text-center md:p-20 shadow-2xl outline-1 outline-white/10">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-transparent to-accent/30 pointer-events-none" />
         <div className="relative z-10 space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground dark:text-white">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
             Transform Any Content Into Interactive Learning
           </h1>
-          <p className="text-muted-foreground dark:text-white/80 text-lg md:text-xl max-w-2xl mx-auto font-light">
+          <p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto font-light">
             Paste a YouTube URL or upload a PDF to generate flashcards, quizzes, and chat with AI
           </p>
         </div>
