@@ -393,6 +393,30 @@ User Input  →  YouTube URL / PDF file
 - Only `.env.example` files are tracked.
 
 --- -->
+## 📸 Screenshots
+Here are some previews of the app:
+### Landing Page:
+<img width=45% alt="Screenshot 2026-03-10 132520" src="https://github.com/user-attachments/assets/3c699f5b-da68-4b70-9987-c80a79e3bc95" />   <img width=45% alt="Screenshot 2026-03-10 132540" src="https://github.com/user-attachments/assets/e31a336a-677e-477a-ac35-c8f7cf72cc65" />
+
+### Content Library:
+<img width=45% alt="Screenshot 2026-03-10 140528" src="https://github.com/user-attachments/assets/2050ba7b-5da4-4eee-9efd-ca23a013e773" />
+
+### Study Dashboard:
+<img width=45% alt="Screenshot 2026-03-10 132805" src="https://github.com/user-attachments/assets/625af143-fffe-41f7-99c1-110908e1e827" />   <img width=45% alt="Screenshot 2026-03-10 133517" src="https://github.com/user-attachments/assets/4c33ef92-9773-481c-94f8-3ad260f9c5b2" />
+
+### FlashCard and MCQ:
+<img width=33% alt="Screenshot 2026-03-10 133737" src="https://github.com/user-attachments/assets/5835e6eb-aed2-4458-8fbb-861d0957ddf3" /> <img width=33% alt="Screenshot 2026-03-10 133329" src="https://github.com/user-attachments/assets/8a8c35bc-b912-4dbe-95ef-fff5544e965d" />   <img width=33% alt="Screenshot 2026-03-10 133453" src="https://github.com/user-attachments/assets/d0048302-d849-4746-8b7f-a78660a62214" />
+
+### RAG Chat:
+<img width=55% alt="Screenshot 2026-03-10 133636" src="https://github.com/user-attachments/assets/6f1e2194-1990-4181-b51b-1871b2308149" />
+
+### Video & PDF Processing:
+<img width=45% alt="Screenshot 2026-03-10 133914" src="https://github.com/user-attachments/assets/8ed0aa9a-4a50-4cb8-9d97-95ba43815332" />   <img width=45% alt="Screenshot 2026-03-10 134005" src="https://github.com/user-attachments/assets/1e964a7e-9c80-4b99-8a21-be364299713d" />
+
+
+
+
+
 
 ## 📄 License
 
