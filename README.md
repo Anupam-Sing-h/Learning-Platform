@@ -14,7 +14,7 @@
 - [User Workflow](#-user-workflow)
 - [Step-by-Step Working Preview](#-step-by-step-working-preview)
 - [API Endpoints](#-api-endpoints)
-- [Common Practices](#-common-practices)
+- [Screen-Shots](#-screenshots)
 - [License](#-license)
 
 ---
